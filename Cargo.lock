@@ -3752,6 +3752,7 @@ version = "0.0.0"
 dependencies = [
  "miette",
  "openshell-core",
+ "openshell-supervisor-middleware",
  "prost-types",
  "serde",
  "serde_json",
