@@ -98,12 +98,12 @@ ghcr.io/nvidia/openshell/supervisor
 
 {{/*
 Whether the gateway listener should verify client certificates (mTLS).
-An explicit empty server.tls.clientCaSecretName disables client-CA wiring in
-both gateway.toml and the workload, overriding built-in PKI and cert-manager
-defaults.
+Disabled when enableMtls is false, TLS is off, or clientCaSecretName is
+explicitly empty.
 */}}
 {{- define "openshell.gatewayClientCaEnabled" -}}
 {{- if .Values.server.disableTls -}}
+{{- else if not .Values.server.tls.enableMtls -}}
 {{- else if eq .Values.server.tls.clientCaSecretName "" -}}
 {{- else if or .Values.server.tls.clientCaSecretName (and .Values.pkiInitJob.enabled (not .Values.certManager.enabled)) (and .Values.certManager.enabled .Values.certManager.clientCaFromServerTlsSecret) -}}
 true
