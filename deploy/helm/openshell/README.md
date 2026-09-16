@@ -322,7 +322,7 @@ discovery endpoint or its TLS CA.
 | upstreamProxy.noProxy | string | `""` | Comma-separated destinations that bypass only the corporate proxy. |
 | upstreamProxy.url | string | `""` | HTTP proxy URL in http://host:port form. HTTPS-to-proxy is not supported. |
 | workload.allowMultiReplicaStatefulSet | bool | `false` | Allow replicaCount > 1 while rendering a StatefulSet. Prefer workload.kind=deployment for external database-backed multi-replica gateways; this override exists for operators who explicitly require StatefulSet identity or storage semantics. |
-| workload.kind | string | `"statefulset"` | Gateway workload controller kind. Use `statefulset` for the default SQLite database, or `deployment` when server.externalDbSecret points at an external database. |
+| workload.kind | string | `""` | Gateway workload controller kind. When unset, the chart auto-selects `deployment` if server.externalDbSecret is configured, otherwise `statefulset` (for the default SQLite database with per-pod storage). Explicit values: `statefulset` or `deployment`. |
 | workspaceResources.enabled | bool | `true` | Create the sandbox ServiceAccount, Role, RoleBinding, and NetworkPolicy from this chart. Disable for a gateway-only release. |
 
 ----------------------------------------------

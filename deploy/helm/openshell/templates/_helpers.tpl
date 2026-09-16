@@ -249,15 +249,23 @@ Name of the ConfigMap holding the backend CA for BackendTLSPolicy validation.
 {{- end }}
 
 {{/*
-Gateway workload kind. StatefulSet is the default because the default SQLite
-database requires persistent per-pod storage.
+Gateway workload kind. When an external database is configured the chart
+defaults to Deployment (no PVC needed); otherwise it defaults to StatefulSet
+so the built-in SQLite database gets persistent per-pod storage.
 */}}
 {{- define "openshell.workloadKind" -}}
 {{- $workload := .Values.workload | default dict -}}
 {{- if not (kindIs "map" $workload) -}}
 {{- fail "workload must be a map with kind and allowMultiReplicaStatefulSet fields." -}}
 {{- end -}}
-{{- default "statefulset" (get $workload "kind") | lower -}}
+{{- $explicit := get $workload "kind" -}}
+{{- if $explicit -}}
+{{- $explicit | lower -}}
+{{- else if .Values.server.externalDbSecret -}}
+deployment
+{{- else -}}
+statefulset
+{{- end -}}
 {{- end }}
 
 {{/*

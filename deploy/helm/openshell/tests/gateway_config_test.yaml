@@ -714,6 +714,7 @@ tests:
     template: templates/statefulset.yaml
     set:
       replicaCount: 2
+      workload.kind: statefulset
       server.externalDbSecret: my-pg-secret
     asserts:
       - failedTemplate:
@@ -723,6 +724,7 @@ tests:
     template: templates/statefulset.yaml
     set:
       replicaCount: 2
+      workload.kind: statefulset
       server.externalDbSecret: my-pg-secret
       workload.allowMultiReplicaStatefulSet: true
       server.credentialDrivers.kubernetesSecrets.enabled: true
@@ -748,7 +750,7 @@ tests:
           errorPattern: "workload.kind must be one of: statefulset, deployment"
 
   - it: does not pass --db-url in args when externalDbSecret is set
-    template: templates/statefulset.yaml
+    template: templates/deployment.yaml
     set:
       server.externalDbSecret: my-pg-secret
     asserts:
@@ -757,7 +759,7 @@ tests:
           content: "--db-url"
 
   - it: references externalDbSecret when set
-    template: templates/statefulset.yaml
+    template: templates/deployment.yaml
     set:
       server.externalDbSecret: my-pg-secret
     asserts:
