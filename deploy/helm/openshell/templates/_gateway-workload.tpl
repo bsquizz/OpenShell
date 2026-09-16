@@ -88,7 +88,8 @@ spec:
           mountPath: /var/openshell
         {{- end }}
         - name: gateway-config
-          mountPath: /etc/openshell
+          mountPath: /etc/openshell/gateway.toml
+          subPath: gateway.toml
           readOnly: true
         - name: sandbox-jwt
           mountPath: /etc/openshell-jwt
