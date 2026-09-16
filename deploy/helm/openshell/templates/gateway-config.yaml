@@ -47,26 +47,13 @@ data:
     {{- if $credentialDrivers }}
     credential_drivers    = [{{- range $i, $driver := $credentialDrivers }}{{ if $i }}, {{ end }}{{ $driver | quote }}{{- end }}]
     {{- end }}
-    sandbox_namespace     = {{ include "openshell.sandboxNamespace" . | quote }}
     {{- $policyValidationFailureMode := .Values.server.policyValidationFailureMode }}
     {{- if not (has $policyValidationFailureMode (list "fail_closed" "retain_last_valid")) }}
     {{- fail "server.policyValidationFailureMode must be fail_closed or retain_last_valid" }}
     {{- end }}
     policy_validation_failure_mode = {{ $policyValidationFailureMode | quote }}
-    default_image         = {{ .Values.server.sandboxImage | quote }}
-    {{- if include "openshell.supervisorImageOverrideEnabled" . }}
-    supervisor_image      = {{ include "openshell.supervisorImage" . | quote }}
-    {{- end }}
-    {{- if .Values.server.hostGatewayIP }}
-    host_gateway_ip       = {{ .Values.server.hostGatewayIP | quote }}
-    {{- end }}
-    {{- if .Values.server.enableUserNamespaces }}
-    enable_user_namespaces = true
-    {{- end }}
     {{- if .Values.server.disableTls }}
     disable_tls            = true
-    {{- else }}
-    client_tls_secret_name = {{ .Values.server.tls.clientTlsSecretName | quote }}
     {{- end }}
     enable_loopback_service_http = {{ .Values.server.enableLoopbackServiceHttp }}
     {{- $sans := list -}}
@@ -148,6 +135,11 @@ data:
     {{- end }}
 
     [openshell.drivers.kubernetes]
+    sandbox_namespace            = {{ include "openshell.sandboxNamespace" . | quote }}
+    default_image                = {{ .Values.server.sandboxImage | quote }}
+    {{- if include "openshell.supervisorImageOverrideEnabled" . }}
+    supervisor_image             = {{ include "openshell.supervisorImage" . | quote }}
+    {{- end }}
     workspace_mode               = {{ .Values.server.drivers.kubernetes.workspaceMode | default "shared" | quote }}
     gateway_id                   = {{ .Values.server.sandboxJwt.gatewayId | default (include "openshell.fullname" .) | quote }}
     grpc_endpoint                = {{ include "openshell.grpcEndpoint" . | quote }}
