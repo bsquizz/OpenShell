@@ -32,7 +32,7 @@ metadata:
 data:
   gateway.toml: |
     [openshell]
-    version = 1
+    version = 2
 
     [openshell.gateway]
     name                  = {{ .Values.server.name | default (include "openshell.fullname" .) | quote }}
